@@ -1,0 +1,65 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+
+<div class="row">
+	<div id="flag_status" style="color:#447e9b;">Update Flagging Status</div>
+	<span id="loading"><img id="loading-image" src="/static/images/loading.gif" style="width: 3%;height: 5%;" /> Flagging Status Script is running</span>
+</div>
+<br><br>
+
+{{ block.super }}
+<div class="app-sonstiges module">
+   
+</div>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#loading").hide();
+	$('#flag_status').css('cursor', 'pointer');
+
+	$("#flag_status").click(function() {
+		
+
+		$.ajax({
+            type:"GET",
+            url: "/flag-history-script-status/",
+           success: function(data) {
+           	//console.log(data['script_status']);
+           	if(data['script_status']=='True')
+           	{
+           		$("#loading").show();
+				$("#flag_status").hide();
+				//console.log("running");
+
+				setTimeout(function() {     
+			        $("#loading").hide();
+			        $("#flag_status").show();
+			    },30000);
+           	}
+           	else
+           	{
+           		$("#loading").show();
+				$("#flag_status").hide();
+           		$.ajax({
+		            type:"GET",
+		            url: "/flag-history/",
+		           success: function(data) {
+		              $("#loading").hide();
+					  $("#flag_status").show();
+					  //console.log("not running");
+		           }
+		         });
+           	}	
+              
+           }
+         });
+
+	});
+
+}); 	
+</script>
+
+{% endblock %}

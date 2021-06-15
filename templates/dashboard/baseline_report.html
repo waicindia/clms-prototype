@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block midpart %}
+
+<style>
+  .table-responsive{
+    height:500px;
+    overflow:scroll;
+  }
+  thead tr:nth-child(1) th{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Baseline Report</h5>
+            </div>
+
+                {% include "dropdown_filter.html" %}
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <!-- <div class="card-header">
+                <h5>Custom Report</h5>
+            </div> -->
+            <div class="card-body">
+                <div class="row float-right" style="margin-right:2px;">
+                    <a href="/baseline-report/?export=true&state={{states_id}}&district={{districts_id}}&shelter_home={{shelter_homes_id}}" >  
+                        <button type="button" class="btn btn-success btn-primary">Export</button>
+                    </a>
+                    <i class="fa fa-info-circle" data-html="true" data-toggle="tooltip" data-placement="top" title="The report will be exported as a CSV file. Please save it as an Excel file to format/sort/filter the data as required." data-original-title="" style="margin-top: 14px;"></i>
+                </div>
+
+
+                <a id="table_top"></a>                  
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>District</th>
+                                <th>Shelter home</th>
+                                <th>Case Number</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>
+                                <th>Date of Birth</th>
+                                <th>Gender</th>
+                                <th>Child Classification</th>
+                                <th>Recommended for Adoption Inquiry(Yes/No)</th>
+                                <th>Admission Number</th>
+                                <th>Date of Admission</th>
+                                <th>Name of Guardian</th>
+                                <th>Relationship</th>
+                                <th>Date of Last Guardian Visit</th>
+                                <th>Last Date of CWC Order or Review</th>
+                                <th>CWC Started the Adoption Inquiry Process</th>
+                                <th>CWC Order Number Declaring Child Free for Adoption</th>
+                                <th>Date Declaring Child Free for Adoption</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in data %}
+                            <tr>
+                                <td>{{a.state_name}}</td>
+                                <td>{{a.district_name}}</td>
+                                <td>{{a.shelter_home_name}}</td>
+                                <td>{{a.case_number}}</td>
+                                <td>{{a.first_name}}</td>
+                                <td>{{a.middle_name}}</td>
+                                <td>{{a.last_name}}</td>
+                                <td nowrap>{{a.dob}}</td>
+                                <td>{{a.gender}}</td>
+                                <td>{{a.classification}}</td>
+                                <td>{{a.reco_adoption_inquiry}}</td>
+                                <td>{{a.admission_number}}</td>
+                                <td nowrap>{{a.date_of_admission}}</td>
+                                <td>{{a.guardian_name}}</td>
+                                <td>{{a.guardian_relation}}</td>
+                                <td nowrap>{{a.guardian_most_recent_visit}}</td>
+                                <td nowrap>{{a.last_review_date}}</td>
+                                <td nowrap>{{a.cwc_started_adoption_inquiry}}</td>
+                                <td>{{a.cwc_order_number}}</td>
+                                <td nowrap>{{a.date_declaring_child_free_for_adoption}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>    
+                
+
+                <!-- PAGINATION -->
+                <nav aria-label="...">
+                {% if data.has_other_pages %}
+                  <ul class="pagination" style="padding-top:20px">
+                    {% if data.has_previous %}
+                      <li><a class="page-link" href="?page={{ 1 }}&state={{states_id}}&district={{districts_id}}&shelter_home={{shelter_homes_id}}#table_top">First</a></li>
+                      <li><a class="page-link" href="?page={{ data.previous_page_number }}&state={{states_id}}&district={{districts_id}}&shelter_home={{shelter_homes_id}}#table_top">Previous</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">First</span></li>
+                      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    {% endif %}
+                    {% for i in display_page_range %}
+                      {% if data.number == i %}
+                        <li class="page-item active"><li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                      {% else %}
+                        <li><a class="page-link" href="?page={{ i }}&state={{states_id}}&district={{districts_id}}&shelter_home={{shelter_homes_id}}#table_top">{{ i }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if data.has_next %}
+                      <li><a class="page-link" href="?page={{ data.next_page_number }}&state={{states_id}}&district={{districts_id}}&shelter_home={{shelter_homes_id}}#table_top">Next</a></li>
+                      <li><a class="page-link" href="?page={{ data.paginator.num_pages }}&state={{states_id}}&district={{districts_id}}&shelter_home={{shelter_homes_id}}#table_top">Last</a></li>
+                    {% else %}
+                      <li class="page-item disabled"><span class="page-link">Next</span></li>
+                      <li class="page-item disabled"><span class="page-link">Last</span></li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
+            </nav>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

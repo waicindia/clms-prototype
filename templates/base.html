@@ -1,0 +1,336 @@
+<!doctype html>
+
+{% block header %}
+
+<html lang="en">
+<head>
+	<title>WAIC</title>
+	<!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 11]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Elite Able Bootstrap admin template made using Bootstrap 4 and it has huge amount of ready made feature, UI components, pages which completely fulfills any dashboard needs.">
+	<meta name="keywords" content="admin templates, bootstrap admin templates, bootstrap 4, dashboard, dashboard templets, sass admin templets, html admin templates, responsive, bootstrap admin templates free download,premium bootstrap admin templates, Elite Able, Elite Able bootstrap admin template">
+	<meta name="author" content="Phoenixcoded">
+
+	<!-- Favicon icon -->
+	<link rel="icon" href="/static/assets/images/favicon.ico" type="image/x-icon">
+	<!-- fontawesome icon -->
+	<link rel="stylesheet" href="/static/assets/fonts/fontawesome/css/fontawesome-all.min.css">
+	<!-- animation css -->
+	<link rel="stylesheet" href="/static/assets/plugins/animation/css/animate.min.css">
+
+
+	<!-- notification css -->
+	<link rel="stylesheet" href="/static/assets/plugins/notification/css/notification.min.css">
+
+	<!-- vendor css -->
+	<link rel="stylesheet" href="/static/assets/css/style.css">
+
+
+	<!-- Chart Loader -->
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+</head>
+
+{% endblock %} 
+
+<body class="">
+
+
+<!-- [ navigation menu ] start -->
+
+{% block left_content %}            
+
+	<nav class="pcoded-navbar menupos-fixed">
+		<div class="navbar-wrapper ">
+			<div class="navbar-brand header-logo">
+                <a href="/dashboard/" class="b-brand">
+                    <div>
+                        <span class="b-title"><img src="/static/assets/images/WAIC_logo.png" style="height:100px;"></span>
+                    </div>
+                    <!-- <span class="b-title">Elite Able</span> -->
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+            </div>
+			<div class="navbar-content scroll-div ps">
+				<ul class="nav pcoded-inner-navbar ">
+
+					<li data-username="">
+						<a href="/dashboard/" class="nav-link"><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Dashboard</span></a>
+						<!-- <ul class="pcoded-submenu">
+							<li class="active">
+								<a href="/dashboard/" class="">
+								<span class="pcoded-micon">
+									<i class="feather icon-grid"></i>
+								</span>Dashboard
+								</a>
+							</li>
+							<li class="">
+								<a href="/state-bar/" class="">
+								<span class="pcoded-micon">
+									<i class="feather icon-list"></i>
+								</span>State</a>
+							</li>
+							<li class="">
+								<a href="/district-bar/" class="">
+								<span class="pcoded-micon">
+									<i class="feather icon-menu"></i>
+								</span>District</a>
+							</li>
+						</ul> -->
+					</li>
+
+					<li data-username="" class="nav-item pcoded-hasmenu">
+						<a href="#!" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layout"></i></span><span class="pcoded-mtext">Reports</span></a>
+						<ul class="pcoded-submenu">
+							<li class="">
+								<a href="/custom-report/" class="">
+									<span class="pcoded-micon">
+									<i class="feather icon-list"></i>
+								</span>Recommended for Adoption Inquiry
+								</a>
+							</li>
+							<li class="">
+								<a href="/baseline-report/" class="">
+									<span class="pcoded-micon">
+									<i class="feather icon-menu"></i>
+								</span>Baseline Report
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			<div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 462px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+			
+		</div>
+	</nav>
+
+
+
+<!-- [ navigation menu ] end -->
+
+	
+
+	<!-- [ Header ] start -->
+	<header class="navbar pcoded-header navbar-expand-lg navbar-light headerpos-fixed">
+		
+			<div class="m-header">
+				<a class="mobile-menu" id="mobile-collapse1" href="#!"><span></span></a>
+				<a href="/dashboard/" class="b-brand">
+					<!-- <div class="b-bg">
+						E
+					</div>
+-->					<span class="b-title" style="margin-left: 0px !important;">
+						<img src="/static/assets/images/WAIC_logo.png" style="height:65px;">
+					</span>
+				</a>
+			</div>
+			<a class="mobile-menu" id="mobile-header" href="#!">
+				<i class="feather icon-more-horizontal"></i>
+			</a>
+			<div class="collapse navbar-collapse">
+				<a href="#!" class="mob-toggler"></a>
+				<ul class="navbar-nav mr-auto">
+					<li>
+						<!-- ============================================================================================= -->
+						<!-- remove .page-header div if you want breadcumb in bottom of header -->
+						<!-- ============================================================================================= -->
+						<!-- [ breadcrumb ] start -->
+						<div class="page-header"><div class="page-header">
+							<div class="page-block">
+								<div class="row align-items-center">
+									<div class="col-md-12">
+										<div class="page-header-title">
+											<h5>Dashboard</h5>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div></div>
+						<!-- [ breadcrumb ] end -->
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<li>
+						<div class="dropdown drp-user">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<i class="fas fa-user-alt"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right profile-notification">
+								<div class="pro-head">
+									<!-- <img src="/static/assets/images/user_image.png" class="img-radius" alt="User-Profile-Image"> -->
+									<span>{{ request.session.user_name }}<br>{{ request.session.userlevel|capfirst}} User </span>
+									<a href="/logout/" class="dud-logout" title="Logout">
+										<i class="feather icon-log-out"></i>
+									</a>
+								</div>
+								<!-- <ul class="pro-body">
+									<li><a href="#!" class="dropdown-item"> User Level:</a></li>
+								</ul> -->
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			
+	</header>
+	<!-- [ Header ] end -->
+	
+
+	<!-- [ chat user list ] start -->
+
+	<!-- [ chat user list ] end -->
+
+	<!-- [ chat message ] start -->
+
+	<!-- [ chat message ] end -->
+
+
+{% endblock %}	
+
+
+
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+	<div class="pcoded-wrapper">
+		<div class="pcoded-content">
+			<div class="pcoded-inner-content">
+				<div class="main-body">
+					<div class="page-wrapper">
+						<!-- [ breadcrumb ] start -->
+						
+						<!-- [ breadcrumb ] end -->
+						<!-- [ Main Content ] start -->
+						
+{% block midpart %}						
+
+
+
+{% endblock %}  
+			
+
+						<!-- [ Main Content ] end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- [ Main Content ] end -->
+
+    <!-- Warning Section start -->
+    <!-- Older IE warning message -->
+    <!--[if lt IE 11]>
+        <div class="ie-warning">
+            <h1>Warning!!</h1>
+            <p>You are using an outdated version of Internet Explorer, please upgrade
+               <br/>to any of the following web browsers to access this website.
+            </p>
+            <div class="iew-container">
+                <ul class="iew-download">
+                    <li>
+                        <a href="http://www.google.com/chrome/">
+                            <img src="/static/assets/images/browser/chrome.png" alt="Chrome">
+                            <div>Chrome</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mozilla.org/en-US/firefox/new/">
+                            <img src="/static/assets/images/browser/firefox.png" alt="Firefox">
+                            <div>Firefox</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.opera.com">
+                            <img src="/static/assets/images/browser/opera.png" alt="Opera">
+                            <div>Opera</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.apple.com/safari/">
+                            <img src="/static/assets/images/browser/safari.png" alt="Safari">
+                            <div>Safari</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                            <img src="/static/assets/images/browser/ie.png" alt="">
+                            <div>IE (11 & above)</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <p>Sorry for the inconvenience!</p>
+        </div>
+    <![endif]-->
+    <!-- Warning Section Ends -->
+
+    <!-- Required Js -->
+    <script src="/static/assets/js/vendor-all.min.js"></script>
+    <script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/assets/js/pcoded.min.js"></script>
+	
+
+
+<!-- am chart js -->
+<script src="/static/assets/plugins/chart-am4/js/core.js"></script>
+<!-- <script src="/static/assets/plugins/chart-am4/js/charts.js"></script> -->
+<!-- <script src="/static/assets/plugins/chart-am4/js/animated.js"></script>-->
+<script src="/static/assets/plugins/chart-am4/js/maps.js"></script>
+<script src="/static/assets/plugins/chart-am4/js/worldLow.js"></script>
+<script src="/static/assets/plugins/chart-am4/js/continentsLow.js"></script>
+
+<!-- dashboard-custom js -->
+<script src="/static/assets/js/pages/dashboard-analytics.js"></script>
+
+
+<!-- <div class="footer">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="footer-text">
+                <p>
+                	<span style="display:inline-block; margin-left: 190px;">Disclaimer - This dashboard uses mock data backed by field research and is for representation purposes only.</span>
+                    
+                </p>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+
+</body></html>

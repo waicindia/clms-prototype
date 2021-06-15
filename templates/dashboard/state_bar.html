@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block midpart %}
+
+
+<div class="row">
+	<div class="col-md-12">
+	    <div class="card">
+	        <div class="card-header">
+	            <h5>State summary</h5>
+	        </div>
+	        <div class="card-body">
+	            <div class="table-responsive">
+	                <table class="table table-sm">
+	                    <thead>
+	                        <tr>
+	                            <th>States</th>
+	                            <th># of Children ready for adoption</th>
+	                            <th># of Children adopted</th>
+	                            <th># visits in last 30 days</th>
+	                            <th># visits in last 60 days</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr>
+	                            <td><a href="/dashboard/">Karnataka</a></td>
+	                            <td>5</td>
+	                            <td>2</td>
+	                            <td>18</td>
+	                            <td>78</td>
+	                        </tr>
+	                        <tr>
+	                            <td><a href="/dashboard/">kerala</a></td>
+	                            <td>71</td>
+	                            <td>22</td>
+	                            <td>87</td>
+	                            <td>16</td>
+	                        </tr>
+	                        <tr>
+	                            <td><a href="/dashboard/">Tamilnadu</a></td>
+	                            <td>55</td>
+	                            <td>27</td>
+	                            <td>75</td>
+	                            <td>65</td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+
+
+{% endblock %}

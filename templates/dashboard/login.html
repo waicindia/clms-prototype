@@ -1,0 +1,95 @@
+{% load static %}
+
+<!doctype html>
+
+<html lang="en"><head>
+    <title>WAIC</title>
+    <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 11]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Elite Able Bootstrap admin template made using Bootstrap 4 and it has huge amount of ready made feature, UI components, pages which completely fulfills any dashboard needs.">
+    <meta name="keywords" content="admin templates, bootstrap admin templates, bootstrap 4, dashboard, dashboard templets, sass admin templets, html admin templates, responsive, bootstrap admin templates free download,premium bootstrap admin templates, Elite Able, Elite Able bootstrap admin template">
+    <meta name="author" content="Phoenixcoded">
+
+    <!-- Favicon icon -->
+    <link rel="icon" href="/static/assets/images/favicon.ico" type="image/x-icon">
+    <!-- fontawesome icon -->
+    <link rel="stylesheet" href="/static/assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="/static/assets/plugins/animation/css/animate.min.css">
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+</head>
+
+<!-- [ auth-signin ] start -->
+<body>
+<div class="blur-bg-images"></div>
+    <div class="auth-wrapper">
+    <div class="auth-content">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="col-md-12">
+                    <div class="card-body">
+                        <!-- <img src="/static/assets/images/logo-dark.png" alt="" class="img-fluid mb-4"> -->
+                        <h3 class="mb-3 f-w-400" style="font-weight: 800;">WAIC Administration</h3>
+
+
+                        <h4 class="mb-3 f-w-400">Login into your account</h4>
+
+                        <form method="POST" action="">
+                         {% csrf_token %}
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="feather icon-mail"></i></span>
+                                </div>
+                                <input type="text" name="username" class="form-control" placeholder="Username">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="feather icon-lock"></i></span>
+                                </div>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+                            </div>
+                            <div class="form-group text-left">
+                                <div class="checkbox checkbox-primary d-inline">
+                                    <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1"  onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'">
+                                    <label for="checkbox-fill-a1" class="cr">Show Password</label>
+                                </div>
+                            </div>
+
+                            {% if request.get_full_path == "/login/?k=usto" %}
+                                <p style="text-align:center;color:red;">Session expired. Please login again</p>
+                            {% endif %}
+
+                            {% if error %}
+                            <p style="text-align:center;color:red;">{{ error }}</p>
+                            {% endif %} {% if msg %}
+                            <p style="text-align:center;color:red;">{{msg}}</p>
+                            {% endif %}
+
+                            <button type="submit" class="btn btn-primary mb-4">Login</button>
+                        </form>                    
+                    </div>
+                </div>
+               <!--  <div class="col-md-6 d-none d-md-block">
+                    <img src="/static/assets/images/auth-bg.jpg" alt="" class="img-fluid">
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ auth-signin ] end -->
+
+<!-- Required Js -->
+<script src="/static/assets/js/vendor-all.min.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+</body></html>

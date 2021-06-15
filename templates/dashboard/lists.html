@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block midpart %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Table</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Column1</th>
+                                <th>Column2</th>
+                                <th>Column3</th>
+                                <th>Column4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, value in projects %}
+                            <tr>
+                                {% for v in value %}
+                                <td>{{v}}</td>
+                                {% endfor %}
+                                <td>
+                                    <!-- <a href="/edit-project/1">
+                                        <button type="button" rel="tooltip" class="btn btn-success pull-left" data-original-title="" title="Edit">
+                                        <i class="material-icons">edit</i>
+                                        </button>
+                                    </a> -->
+                                    <a href="/detail/{{key}}">
+                                        <button type="button" class="btn btn-icon btn-info"><i class="feather icon-info"></i></button>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                
+
+                <!-- PAGINATION -->
+                <nav aria-label="...">
+                {% if projects.has_other_pages %}
+                  <ul class="pagination">
+                    {% if projects.has_previous %}
+                      <li><a class="page-link" href="?page={{ projects.previous_page_number }}">Previous</a></li>
+                    {% else %}
+                      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    {% endif %}
+                    {% for i in projects.paginator.page_range %}
+                      {% if projects.number == i %}
+                        <li class="page-item active"><li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                      {% else %}
+                        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if projects.has_next %}
+                      <li><a class="page-link" href="?page={{ projects.next_page_number }}">Next</a></li>
+                    {% else %}
+                      <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
+            </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block midpart %}
+
+
+<!--************Chart Script Part*********-->
+{% include "dashboard/chart_script.html" %}
+<!--**************************************-->
+
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header" style="text-align:center">
+				<h5>Identifying and Recommending Eligible Children in CCIs for Adoption Inquiry</h5>
+			</div>
+				{% include "dropdown_filter.html" %}
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	{% for ct in data_html.chart %}
+		{% if ct.on_click_handler != "" %}
+			<script type="text/javascript">
+				function displayDefaultPointer() {
+					$('#{{ct.chart_name}}').css('cursor','default')
+				}
+				function displayHandPointer() {
+					$('#{{ct.chart_name}}').css('cursor','pointer')
+				}
+			</script>
+		{% endif %}
+		<div class="{{ct.div}}">
+			<div class="card">
+				<div class="card-header">
+					<h5>{{ct.chart_title}} <i class="fa fa-info-circle" data-html="true" data-toggle="tooltip" data-placement="top" title="{{ct.tooltip}}" data-original-title=""></i></h5>
+				</div>
+				<div class="card-body">
+	                <div class="row">
+	                  <div id="{{ct.chart_name}}" style="width:100%;height:{{ct.chart_height}};"></div>
+					</div>
+					<span style="display:inline-block; margin-left: 20px;">{{ct.chart_note|safe}}</span>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+
+
+<div class="footer">
+        <div class="col-md-12">
+            <div class="footer-text">
+            	{{disclaimer.value|safe}}
+            </div>
+    </div>
+</div>
+{% endblock %}

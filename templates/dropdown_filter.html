@@ -1,0 +1,174 @@
+<div class="card-body">
+	<form action="{{form_url}}" class="form-horizontal" method="POST" id="filters">
+        {%csrf_token%}
+        <div class="row">
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="state">State:</label>
+                    <select name="state" class="form-control" id="state" {% if user_location.state_list|length == 1 %} disabled {% endif %}>
+                        {% if user_location.state_list|length > 1 %}
+                            <option value="">All States</option>
+                        {% endif %}
+                        {% for states in user_location.state_list %}
+                            <option value="{{states.id}}" {% if states_id == states.id %} selected  {% endif %}>{{states.name}}</option>
+                        {% endfor %}
+                    </select>
+                    {% if user_location.state_list|length == 1 %}
+                        <input type="hidden" id="state" value="{{states.0.id}}">
+                    {% endif %}
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="district">District:</label>
+	                <select name="district" class="form-control" id="district"  {% if user_location.district_list|length == 1 %} disabled {% endif %}>
+                        {% if user_location.district_list|length > 1 %}
+                            <option value="">All Districts</option>
+                        {% endif %}
+                        {% for districts in user_location.district_list %}
+                            <option value="{{districts.id}}" {% if districts_id == districts.id %} selected  {% endif %}>{{districts.name}}</option>
+                        {% endfor %}
+	                </select>
+                    {% if user_location.district_list|length == 1 %}
+                        <input type="hidden" id="district" value="{{districts.0.id}}">
+                    {% endif %}
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="shelter_home">Shelter Home:</label>
+	                <select name="shelter_home" class="form-control" id="shelter_home" {% if user_location.shelter_home_list|length == 1 %} disabled {% endif %}>
+                        {% if user_location.shelter_home_list|length > 1 %}
+                            <option value="">All Shelter Homes</option>
+                        {% endif %}
+                        {% for shelter_homes in user_location.shelter_home_list %}
+                            <option value="{{shelter_homes.id}}" {% if shelter_homes_id == shelter_homes.id %} selected  {% endif %}>{{shelter_homes.name}}</option>
+                        {% endfor %}
+	                </select>
+                    {% if user_location.shelter_home_list|length == 1 %}
+                        <input type="hidden" id="shelter_home" value="{{shelter_homes.0.id}}">
+                    {% endif %}
+				</div>
+			</div>
+		</div>
+		<button type="button" id="reset" class="btn btn-square btn-warning float-right">Reset</button>
+		<button type="submit" class="btn btn-square btn-primary float-right">Submit</button>
+
+	</form>
+	
+</div>
+
+<script> 
+$(document).ready(function() {
+
+/*Resetting the Dropdown selected options while clicking Reset Button*/
+$("#reset").click(function() {
+    //console.log({{ user_location.state_list|length|safe }});
+    if({{ user_location.state_list|length|safe }} > 1)
+    {   
+        $('#state').val($("#state option:first").val());
+        $('#district').html('');
+        $('#shelter_home').html('');
+    }
+    if({{ user_location.district_list|length|safe }} > 1)
+    {   
+        $('#district').val($("#district option:first").val());
+        $('#shelter_home').html('');
+    }
+    if({{ user_location.shelter_home_list|length|safe }} > 1)
+    {   
+        $('#shelter_home').val($("#shelter_home option:first").val());
+    }
+    // $('#state').val($("#state option:first").val());
+    // $('#district').val($("#district option:first").val());
+    // $('#shelter_home').val($("#shelter_home option:first").val());
+    // submit the form to reload the data based on the reset values of the filter
+    this.form.submit();
+});
+
+
+/*loading District based on State */
+$('#state').change(function() {
+    var state_id = $(this).val();
+    if(state_id=='')
+    {
+        $('#district').html('');
+        $('#shelter_home').html('');
+        var district_datas = '<option value="">All Districts</option>';
+        $("#district").append(district_datas);
+
+        var shelter_datas = '<option value="">All Shelter Homes</option>';
+        $("#shelter_home").append(shelter_datas);
+    }
+    if(state_id) {
+        targeturl="/district-data/"+state_id;
+        $.ajax({
+            url: targeturl, 
+            type: 'POST',
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(result){
+
+            	//console.log(result.district);
+
+                $('#district').html('');
+                $('#shelter_home').html('');
+
+                if(result.district.length >1 )
+                {    
+                    var district_datas = '<option value="">All Districts</option>';
+                    $("#district").append(district_datas);
+                }
+
+                // shelter_datas = '<option value="">All Shelter Homes</option>';
+                // $("#shelter_home").append(shelter_datas);
+
+                for (res in result.district)
+                {
+                    var r = result.district[res];
+                    var option = '<option value=' + r.id + '>' + r.name + '</option>';
+                    $("#district").append(option);
+                }
+            }
+        });
+    }
+});
+
+
+/*loading Shelter Home based on District */
+$('#district').change(function() {
+    var district_id = $(this).val();
+    if(district_id=='')
+    {
+        $('#shelter_home').html('');
+        var shelerhome_datas = '<option value="">All Shelter Homes</option>';
+        $("#shelter_home").append(shelerhome_datas);
+    }
+    if(district_id) {
+        targeturl="/shelterhome-data/"+district_id;
+        $.ajax({
+            url: targeturl, 
+            type: 'POST',
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(result){
+                $('#shelter_home').html('');
+
+                if(result.shelter_home.length >1 )
+                {
+                    var shelerhome_datas = '<option value="">All Shelter Homes</option>';
+                    $("#shelter_home").append(shelerhome_datas);
+                }
+
+                for (res in result.shelter_home)
+                {
+                    var r = result.shelter_home[res];
+                    var option = '<option value=' + r.id + '>' + r.name + '</option>';
+                    $("#shelter_home").append(option);
+                }
+            }
+        });
+    }
+});
+
+
+}); 
+</script>

@@ -1,0 +1,14 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  tags:
+    - ci
+  script:
+    - chmod og= $ID_RSA 
+    - ssh -i $ID_RSA -p22022 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /home/mahiti/WAIC"
+    - ssh -i $ID_RSA -p22022 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /home/mahiti/WAIC && git pull https://Vishnu:mahiti123456@git.mahiti.org/python/waic-api.git master"
+    - ssh -t -i $ID_RSA -p22022 -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sh /home/mahadmin/reload.sh"
+  only:
+    - master
