@@ -40,6 +40,7 @@ def login_view(request):
 # Function to load user details to session
 #****************************************************************************
 def load_user_details_to_session(request, user):
+    from django.contrib.contenttypes.models import ContentType
     location_relation = UserLocationRelation.objects.filter(user_id=user.id).first()
     user_location_id=location_relation.location_id
     location_hierarchy_type_id=location_relation.location_hierarchy_type.id
@@ -47,27 +48,30 @@ def load_user_details_to_session(request, user):
     request.session['user_location_id']=user_location_id
     request.session['location_hierarchy_type_id']=location_hierarchy_type_id
     request.session['user_name']=request.user.get_full_name()
-
+    centre_content_type = ContentType.objects.get(app_label='master_data', model='centre')
+    state_content_type = ContentType.objects.get(app_label='master_data', model='state')
+    district_content_type = ContentType.objects.get(app_label='master_data', model='district')
+    shelterhome_content_type = ContentType.objects.get(app_label='master_data', model='shelterhome')
     #User Level
-    if location_hierarchy_type_id==4:
-        request.session['userlevel']="Super"
-    else:
-        user_level = ContentType.objects.filter(pk = location_hierarchy_type_id).values('app_label','model').first()
-        request.session['userlevel']=user_level['model']
+    # if location_hierarchy_type_id==4:
+    #     request.session['userlevel']="Super"
+    # else:
+    user_level = ContentType.objects.filter(pk = location_hierarchy_type_id).values('app_label','model').first()
+    request.session['userlevel']=user_level['model'] if user_level else ""
 
-    if request.user.is_superuser or location_hierarchy_type_id==9: #Super or Center User
+    if request.user.is_superuser or location_hierarchy_type_id==centre_content_type.id: #Super or Center User
         request.session['user_location'] = ((0,''), (0,''), (0,''))
 
-    elif location_hierarchy_type_id==12: #State User
+    elif location_hierarchy_type_id==state_content_type.id: #State User 
         state = State.objects.filter(pk = user_location_id).values('id','name','centre').first()
         request.session['user_location'] = ((state['id'],state['name']), (0,''), (0,''))
 
-    elif location_hierarchy_type_id==10: #District User
+    elif location_hierarchy_type_id==district_content_type.id: #District User
         district = District.objects.filter(pk = user_location_id).values('id','name','state').first()
         state = State.objects.filter(pk = district['state']).values('id','name','centre').first()
         request.session['user_location'] = ((state['id'],state['name']), (district['id'],district['name']), (0,''))
 
-    elif location_hierarchy_type_id==11: #Shelterhome User
+    elif location_hierarchy_type_id==shelterhome_content_type.id: #Shelterhome User
         shelter_home = ShelterHome.objects.filter(pk = user_location_id).values('id','name','district').first()
         district = District.objects.filter(pk = shelter_home['district']).values('id','name','state').first()
         state = State.objects.filter(pk = district['state']).values('id','name','centre').first()
