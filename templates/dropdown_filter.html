@@ -14,14 +14,14 @@
                         {% endfor %}
                     </select>
                     {% if user_location.state_list|length == 1 %}
-                        <input type="hidden" id="state" value="{{states.0.id}}">
+                        <input type="hidden" name="state" id="state" value="{{user_location.state_list.0.id}}">
                     {% endif %}
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="district">District:</label>
-	                <select name="district" class="form-control" id="district"  {% if user_location.district_list|length == 1 %} disabled {% endif %}>
+	                <select name="district" class="form-control" id="district" >
                         {% if user_location.district_list|length > 1 %}
                             <option value="">All Districts</option>
                         {% endif %}
@@ -30,14 +30,14 @@
                         {% endfor %}
 	                </select>
                     {% if user_location.district_list|length == 1 %}
-                        <input type="hidden" id="district" value="{{districts.0.id}}">
+                        <input type="hidden" name="district" id="district" value="{{user_location.district_list.0.id}}">
                     {% endif %}
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="shelter_home">Shelter Home:</label>
-	                <select name="shelter_home" class="form-control" id="shelter_home" {% if user_location.shelter_home_list|length == 1 %} disabled {% endif %}>
+	                <select name="shelter_home" class="form-control" id="shelter_home" >
                         {% if user_location.shelter_home_list|length > 1 %}
                             <option value="">All Shelter Homes</option>
                         {% endif %}
@@ -46,7 +46,7 @@
                         {% endfor %}
 	                </select>
                     {% if user_location.shelter_home_list|length == 1 %}
-                        <input type="hidden" id="shelter_home" value="{{shelter_homes.0.id}}">
+                        <input type="hidden" name="shelter_home" id="shelter_home" value="{{user_location.shelter_home_list.0.id}}">
                     {% endif %}
 				</div>
 			</div>
@@ -61,6 +61,8 @@
 <script> 
 function reload_district_filter(state_id)
 {
+    $('#district').removeAttr("disabled");
+       
     if(state_id=='')
     {
         $('#district').html('');
@@ -79,8 +81,6 @@ function reload_district_filter(state_id)
             data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
             success: function(result){
 
-                //console.log(result.district);
-
                 var district_id = $('#district').val();
                 var shelter_home_id = $('#shelter_home').val();
                 $('#district').html('');
@@ -94,8 +94,8 @@ function reload_district_filter(state_id)
                 // $("#shelter_home").append(shelter_datas);
                 else if(result.district.length == 1 ){
                     district_id = result.district[0].id;
+                    $('#district').prop("disabled", true);
                 }
-                console.log('reload district-district_id:' + district_id);
                 for (res in result.district)
                 {
                     var r = result.district[res];
@@ -108,7 +108,6 @@ function reload_district_filter(state_id)
                     }
                     $("#district").append(option); 
                }
-               console.log('reload district-before reloadshelterhome:' + district_id);
                reload_shelterhome_filter(district_id, shelter_home_id);
             }
         });    
@@ -116,6 +115,8 @@ function reload_district_filter(state_id)
 }
 function reload_shelterhome_filter(district_id, shelterhome_id)
 {
+        
+    $('#shelter_home').removeAttr("disabled");
     if(district_id=='')
     {
         $('#shelter_home').html('');
@@ -139,8 +140,8 @@ function reload_shelterhome_filter(district_id, shelterhome_id)
                 }
                 else if (result.shelter_home.length == 1){
                     shelter_home_id = result.shelter_home[0].id;
+                    $('#shelter_home').prop("disabled", true);
                 }
-                console.log('reload shelterhome-shelter_home_id:' + shelter_home_id);
                 for (res in result.shelter_home)
                 {
                     var r = result.shelter_home[res];
@@ -163,7 +164,6 @@ $(document).ready(function() {
 
     /*Resetting the Dropdown selected options while clicking Reset Button*/
     $("#reset").click(function() {
-        //console.log({{ user_location.state_list|length|safe }});
         if({{ user_location.state_list|length|safe }} > 1)
         {   
             $('#state').val($("#state option:first").val());
@@ -189,18 +189,18 @@ $(document).ready(function() {
     var state_id = $('#state').val();
     var district_id = $('#district').val();
     var shelterhome_id = $('#shelterhome').val();
-    console.log('readey-state_id:' + state_id);
     reload_district_filter(state_id);
 
-    console.log('readey-district_id:' + district_id);
-    console.log('readey-shelterhome:' + shelterhome_id);
     reload_shelterhome_filter(district_id,shelterhome_id);
+
+    
+        
 
     /*loading District based on State */
     $('#state').change(function() {
         var state_id = $(this).val();
-        console.log('change-district_id:' + state_id);
         $('#district').html('');
+        
         reload_district_filter(state_id);
     });
 
@@ -209,7 +209,6 @@ $(document).ready(function() {
         var district_id = $(this).val();
         $('#shelterhome').html('');
         var shelterhome_id = $("shelterhome").val();
-        console.log('change-district_id:' + district_id);
         reload_shelterhome_filter(district_id,shelterhome_id);
     });
 }); 
