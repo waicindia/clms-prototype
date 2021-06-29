@@ -6,4 +6,6 @@ __pycache__
 */settings.py
 */__pycache__/*
 media/*
-static/*
+!media/.gitkeep
+*.log
+*.log.*
