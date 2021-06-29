@@ -59,37 +59,8 @@
 </div>
 
 <script> 
-$(document).ready(function() {
-
-/*Resetting the Dropdown selected options while clicking Reset Button*/
-$("#reset").click(function() {
-    //console.log({{ user_location.state_list|length|safe }});
-    if({{ user_location.state_list|length|safe }} > 1)
-    {   
-        $('#state').val($("#state option:first").val());
-        $('#district').html('');
-        $('#shelter_home').html('');
-    }
-    if({{ user_location.district_list|length|safe }} > 1)
-    {   
-        $('#district').val($("#district option:first").val());
-        $('#shelter_home').html('');
-    }
-    if({{ user_location.shelter_home_list|length|safe }} > 1)
-    {   
-        $('#shelter_home').val($("#shelter_home option:first").val());
-    }
-    // $('#state').val($("#state option:first").val());
-    // $('#district').val($("#district option:first").val());
-    // $('#shelter_home').val($("#shelter_home option:first").val());
-    // submit the form to reload the data based on the reset values of the filter
-    this.form.submit();
-});
-
-
-/*loading District based on State */
-$('#state').change(function() {
-    var state_id = $(this).val();
+function reload_district_filter(state_id)
+{
     if(state_id=='')
     {
         $('#district').html('');
@@ -108,35 +79,43 @@ $('#state').change(function() {
             data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
             success: function(result){
 
-            	//console.log(result.district);
+                //console.log(result.district);
 
+                var district_id = $('#district').val();
+                var shelter_home_id = $('#shelter_home').val();
                 $('#district').html('');
                 $('#shelter_home').html('');
-
                 if(result.district.length >1 )
                 {    
                     var district_datas = '<option value="">All Districts</option>';
                     $("#district").append(district_datas);
                 }
-
                 // shelter_datas = '<option value="">All Shelter Homes</option>';
                 // $("#shelter_home").append(shelter_datas);
-
+                else if(result.district.length == 1 ){
+                    district_id = result.district[0].id;
+                }
+                console.log('reload district-district_id:' + district_id);
                 for (res in result.district)
                 {
                     var r = result.district[res];
-                    var option = '<option value=' + r.id + '>' + r.name + '</option>';
-                    $("#district").append(option);
-                }
+                    var option = "";
+                    if (district_id != 'undefined' && district_id != null && r.id == district_id){
+                        option = '<option value=' + r.id + ' selected >' + r.name + '</option>';
+                    }
+                    else{
+                        option = '<option value=' + r.id + '>' + r.name + '</option>';
+                    }
+                    $("#district").append(option); 
+               }
+               console.log('reload district-before reloadshelterhome:' + district_id);
+               reload_shelterhome_filter(district_id, shelter_home_id);
             }
-        });
+        });    
     }
-});
-
-
-/*loading Shelter Home based on District */
-$('#district').change(function() {
-    var district_id = $(this).val();
+}
+function reload_shelterhome_filter(district_id, shelterhome_id)
+{
     if(district_id=='')
     {
         $('#shelter_home').html('');
@@ -145,6 +124,7 @@ $('#district').change(function() {
     }
     if(district_id) {
         targeturl="/shelterhome-data/"+district_id;
+        var shelter_home_id = shelterhome_id;
         $.ajax({
             url: targeturl, 
             type: 'POST',
@@ -157,18 +137,80 @@ $('#district').change(function() {
                     var shelerhome_datas = '<option value="">All Shelter Homes</option>';
                     $("#shelter_home").append(shelerhome_datas);
                 }
-
+                else if (result.shelter_home.length == 1){
+                    shelter_home_id = result.shelter_home[0].id;
+                }
+                console.log('reload shelterhome-shelter_home_id:' + shelter_home_id);
                 for (res in result.shelter_home)
                 {
                     var r = result.shelter_home[res];
-                    var option = '<option value=' + r.id + '>' + r.name + '</option>';
+                    var option = '';
+                    if(shelter_home_id != 'undefined' && shelter_home_id != null  && r.id == shelter_home_id)
+                    {
+                        option = '<option value=' + r.id + ' selected >' + r.name + '</option>';
+                    }
+                    else 
+                    {
+                        option = '<option value=' + r.id + '>' + r.name + '</option>';
+                    }
                     $("#shelter_home").append(option);
                 }
             }
         });
     }
-});
+}
+$(document).ready(function() {
 
+    /*Resetting the Dropdown selected options while clicking Reset Button*/
+    $("#reset").click(function() {
+        //console.log({{ user_location.state_list|length|safe }});
+        if({{ user_location.state_list|length|safe }} > 1)
+        {   
+            $('#state').val($("#state option:first").val());
+            $('#district').html('');
+            $('#shelter_home').html('');
+        }
+        if({{ user_location.district_list|length|safe }} > 1)
+        {   
+            $('#district').val($("#district option:first").val());
+            $('#shelter_home').html('');
+        }
+        if({{ user_location.shelter_home_list|length|safe }} > 1)
+        {   
+            $('#shelter_home').val($("#shelter_home option:first").val());
+        }
+        // $('#state').val($("#state option:first").val());
+        // $('#district').val($("#district option:first").val());
+        // $('#shelter_home').val($("#shelter_home option:first").val());
+        // submit the form to reload the data based on the reset values of the filter
+        this.form.submit();
+    });
 
+    var state_id = $('#state').val();
+    var district_id = $('#district').val();
+    var shelterhome_id = $('#shelterhome').val();
+    console.log('readey-state_id:' + state_id);
+    reload_district_filter(state_id);
+
+    console.log('readey-district_id:' + district_id);
+    console.log('readey-shelterhome:' + shelterhome_id);
+    reload_shelterhome_filter(district_id,shelterhome_id);
+
+    /*loading District based on State */
+    $('#state').change(function() {
+        var state_id = $(this).val();
+        console.log('change-district_id:' + state_id);
+        $('#district').html('');
+        reload_district_filter(state_id);
+    });
+
+    /*loading Shelter Home based on District */
+    $('#district').change(function() {
+        var district_id = $(this).val();
+        $('#shelterhome').html('');
+        var shelterhome_id = $("shelterhome").val();
+        console.log('change-district_id:' + district_id);
+        reload_shelterhome_filter(district_id,shelterhome_id);
+    });
 }); 
 </script>
