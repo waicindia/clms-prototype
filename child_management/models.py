@@ -45,7 +45,7 @@ class ChildShelterHomeRelation(BaseContent):
     child = models.ForeignKey(Child, on_delete=models.CASCADE, blank=False, null=False,verbose_name='Case number')
     shelter_home = models.ForeignKey(ShelterHome, on_delete=models.CASCADE, blank=False, null=False)
     admission_number =  models.CharField(max_length=150, blank=True, null=True)
-    date_of_admission = models.DateField(blank=True, null=True)
+    date_of_admission = models.DateField(blank=False, null=False)
     date_of_exit = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -89,4 +89,4 @@ class ChildCWCHistory(BaseContent):
         verbose_name_plural = "Child CWC History"
 
     def __str__(self):
-        return self.child.case_number         
+        return self.child.case_number

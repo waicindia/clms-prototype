@@ -443,7 +443,7 @@ def dashboard(request):
                         "chart_height": "400px",
                         "on_click_urls": [],
                         "on_click_handler": "",
-                        "datas": [['', ''],['<= 6 months', 1],['> 6 months and <= 1 year', 5],['1-3 years', 50],['3-5 years', 41],['> 5 years', 83],],
+                        "datas": [['', ''],['<= 6 months', 1],['> 6 months and <= 1 year', 5],['1-3 years', 50],['3-5 years', 41],['5-10 years', 41],['10-15 years', 41],['> 15 years', 83],],
                         "options": {
                                       "chart": {
                                         "title": '',
@@ -452,7 +452,7 @@ def dashboard(request):
                                       "legend": { "position": 'left', "maxLines": "3"},
                                       "pieSliceText": 'value-and-percentage',
                                       "title": '% of Children',
-                                      "colors": ['#32B517','#FFAA00','#19B2FF','#6C5EE6','#FF3333'],
+                                      "colors": ['#289012','#FFAA00','#19B2FF','#4a93bb','#b05ee6','#6C5EE6','#FF3333'],
                                        "chartArea": { 'width': '95%', 'height': '80%', 'top': '15%', 'bottom': '10%'},
                                     },
                         "chart_type": "PIECHART",
@@ -532,7 +532,9 @@ def dashboard(request):
                         coalesce(sum(case when (((stay_in_months + floor(additional_days/30::numeric)) = 6 and additional_days::int%30 > 0) or ((stay_in_months + floor(additional_days/30::numeric)) > 6 and (stay_in_months + floor(additional_days/30::numeric)) < 12) or ((stay_in_months + floor(additional_days/30::numeric)) = 12 and additional_days::int%30 = 0)) then 1 else 0 end),0) as six_months_to_one_year,
                         coalesce(sum(case when (((stay_in_months + floor(additional_days/30::numeric)) = 12 and additional_days::int%30 > 0) or ((stay_in_months + floor(additional_days/30::numeric)) > 12 and (stay_in_months + floor(additional_days/30::numeric)) < 36) or ((stay_in_months + floor(additional_days/30::numeric)) = 36 and additional_days::int%30 = 0)) then 1 else 0 end),0) as one_to_three_year,
                         coalesce(sum(case when (((stay_in_months + floor(additional_days/30::numeric)) = 36 and additional_days::int%30 > 0) or ((stay_in_months + floor(additional_days/30::numeric)) > 36 and (stay_in_months + floor(additional_days/30::numeric)) < 60) or ((stay_in_months + floor(additional_days/30::numeric)) = 60 and additional_days::int%30 = 0)) then 1 else 0 end),0) as three_to_five_year,
-                        coalesce(sum(case when (((stay_in_months + floor(additional_days/30::numeric)) = 60 and additional_days::int%30 > 0) or ((stay_in_months + floor(additional_days/30::numeric)) > 60)) then 1 else 0 end),0) as greater_than_five_year
+                        coalesce(sum(case when (((stay_in_months + floor(additional_days/30::numeric)) = 60 and additional_days::int%30 > 0) or ((stay_in_months + floor(additional_days/30::numeric)) > 60 and (stay_in_months + floor(additional_days/30::numeric)) < 120) or ((stay_in_months + floor(additional_days/30::numeric)) = 120 and additional_days::int%30 = 0)) then 1 else 0 end),0) as five_to_ten_year,
+                        coalesce(sum(case when (((stay_in_months + floor(additional_days/30::numeric)) = 120 and additional_days::int%30 > 0) or ((stay_in_months + floor(additional_days/30::numeric)) > 120 and (stay_in_months + floor(additional_days/30::numeric)) < 180) or ((stay_in_months + floor(additional_days/30::numeric)) = 180 and additional_days::int%30 = 0)) then 1 else 0 end),0) as ten_to_fifteen_year,
+                        coalesce(sum(case when (((stay_in_months + floor(additional_days/30::numeric)) = 180 and additional_days::int%30 > 0) or ((stay_in_months + floor(additional_days/30::numeric)) > 180)) then 1 else 0 end),0) as greater_than_fifteen_year
                         from (
                             select dcc.child_id, sum(dcc.stay_in_months) as stay_in_months, sum(additional_days) as additional_days
                             from dash_child_cci_stay_view dcc
@@ -891,7 +893,8 @@ def custom_report(request):
                         coalesce(total_shelter_home_stay,'') as shelter_home_stay,
                         coalesce(last_cwc_review_duration,'') as last_cwc_review_duration,
                         coalesce(date_of_admission,'') as date_of_admission,
-                        coalesce(admission_number,'') as admission_number
+                        coalesce(admission_number,'') as admission_number,
+                        coalesce(remarks,'') as remarks
                         from rep_child_details_view 
                         where 1=1 @@state_filter @@district_filter @@shelter_filter"""
     report_query = filter_condtition(request,report_query)
@@ -932,7 +935,8 @@ def custom_report(request):
                             'Length of Stay in the Shelter',
                             'Duration since the last CWC Periodic Review',
                             'Date of Admission',
-                            'Admission No.',])
+                            'Admission No.',
+                            'Remarks',])
 
             for obj in export_data:
                 row_num += 1
@@ -954,7 +958,8 @@ def custom_report(request):
                      obj['shelter_home_stay'],
                      obj['last_cwc_review_duration'],
                      obj['date_of_admission'],
-                     obj['admission_number'],))
+                     obj['admission_number'],
+                     obj['remarks'],))
             return response                  
     return render(request,'dashboard/custom_report.html',locals())
 
@@ -1010,7 +1015,8 @@ def baseline_report(request):
                         coalesce(last_review_date,'') as last_review_date,
                         coalesce(cwc_started_adoption_inquiry,'') as cwc_started_adoption_inquiry,
                         coalesce(cwc_order_number,'') as cwc_order_number,
-                        coalesce(date_declaring_child_free_for_adoption,'') as date_declaring_child_free_for_adoption
+                        coalesce(date_declaring_child_free_for_adoption,'') as date_declaring_child_free_for_adoption,
+                        coalesce(remarks, '') as remarks
                         from rep_child_baseline_report 
                     where 1=1 @@state_filter @@district_filter @@shelter_filter"""
     report_query = filter_condtition(request,report_query)
@@ -1054,7 +1060,8 @@ def baseline_report(request):
                             'Last Date of CWC Order or Review',
                             'CWC Started the Adoption Inquiry Process',
                             'CWC Order Number Declaring Child Free for Adoption',
-                            'Date Declaring Child Free for Adoption',])
+                            'Date Declaring Child Free for Adoption',
+                            'Remarks',])
             for obj in export_data:
                 row_num += 1
                 writer.writerow((row_num, obj['state_name'],
@@ -1076,7 +1083,8 @@ def baseline_report(request):
                      obj['last_review_date'],
                      obj['cwc_started_adoption_inquiry'],
                      obj['cwc_order_number'],
-                     obj['date_declaring_child_free_for_adoption'],))
+                     obj['date_declaring_child_free_for_adoption'],
+                     obj['remarks'],))
             return response
     return render(request,'dashboard/baseline_report.html',locals())   
 

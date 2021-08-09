@@ -64,7 +64,8 @@
                                 <th>Length of Stay in the Shelter</th>
                                 <th>Duration since the last CWC Periodic Review</th>
                                 <th>Date of Admission</th>
-                                <th>Admission No.</th>                                
+                                <th>Admission No.</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,6 +89,7 @@
                                 <td>{{a.last_cwc_review_duration}}</td>
                                 <td nowrap>{{a.date_of_admission}}</td>
                                 <td>{{a.admission_number}}</td>
+                                <td>{{a.remarks}}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

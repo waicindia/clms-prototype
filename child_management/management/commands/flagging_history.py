@@ -64,11 +64,11 @@ class Command(BaseCommand):
 						family_visit = FamilyVisit.objects.filter(child=data['id'],active=2).order_by('-date_of_visit','-id').first()
 						# if family_visit:
 						# 	logger.info("family_visit_QUERY:" + str(family_visit.query))
-						if child_shelter and child_shelter.date_of_admission <= x_days_ago and family_visit is None:
+						if child_shelter and child_shelter.date_of_admission is not None and child_shelter.date_of_admission <= x_days_ago and family_visit is None:
 							logger.debug("2.date_of_admission:" + str(child_shelter.date_of_admission))
 							flagging_status = 1 #Child recommended for adoption enquiry
 							reason = "No family visit"
-						elif child_shelter and child_shelter.date_of_admission <= x_days_ago and family_visit and family_visit.date_of_visit <= x_days_ago:
+						elif child_shelter and child_shelter.date_of_admission is not None and child_shelter.date_of_admission <= x_days_ago and family_visit and family_visit.date_of_visit <= x_days_ago:
 							logger.debug("3.date_of_admission:" + str(child_shelter.date_of_admission) + " date_of_visit:" + str(family_visit.date_of_visit))
 							flagging_status = 1 #Child recommended for adoption enquiry
 							reason = "Last family visit more than 180 days ago"
@@ -80,7 +80,7 @@ class Command(BaseCommand):
 							logger.debug("5.child_shelter: None")
 							flagging_status = 3 #Not applicable
 							reason = "Child's CCI information is not available"
-						elif child_shelter and child_shelter.date_of_admission > x_days_ago:
+						elif child_shelter and child_shelter.date_of_admission is not None and child_shelter.date_of_admission > x_days_ago:
 							logger.debug("6.date_of_admission: "  + str(child_shelter.date_of_admission))
 							flagging_status = 3 #Not applicable
 							reason = "Child's stay in CCI less than 180 days and child's guardian's fitness needs to be evaluated"
